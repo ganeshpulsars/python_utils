@@ -1,0 +1,9 @@
+*.bak
+*.pyc
+*.db
+*.csv
+*.html
+*.jpg
+DIL_*.*
+db_archive/*
+images/*
