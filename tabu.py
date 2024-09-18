@@ -22,10 +22,14 @@ def tabu(fullFilename, archive_folder=None):
         now = datetime.now()
         timeStamp = now.strftime("%y%m%d_%H%M")
         new_fn = f"{fn}_B{timeStamp}p" + "".join(suffixes)
-        if archive_folder is not None:
-            ffn = filePath / archive_folder / new_fn
-        else:
+        if archive_folder is None:
             ffn = filePath / new_fn
+        else:
+            arch_folder_path = filePath / archive_folder
+            if not arch_folder_path.is_dir():
+                Path(arch_folder_path).mkdir(exist_ok=True)
+                # raise Exception(f"{arch_folder_path.absolute()} does not exist")
+            ffn = filePath / archive_folder / new_fn
         shutil.copy2(fullFilename, ffn)
         return ffn
     except Exception as e:
