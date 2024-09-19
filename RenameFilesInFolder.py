@@ -5,14 +5,27 @@ from .generalUtils import render_exception
 
 
 def RenameFilesInFolder(
-    folder, FileNamePrefix=None, start_index=None, noof_digits=None
-):
+    folder: str,
+    FileNamePrefix: str = None,
+    start_index: int = None,
+    noof_digits: int = None,
+) -> None:
     """
     Function to rename files in the folder using a prefix and
-    running serial number. Folder name itself is used as prefix
-    if the second parameter is not provided
+    running serial number.
     Files in the first level alone are renamed. Files under sub-folders
-    (if any) are not renamed
+    (if any) are not renamed.
+    Old filename and new filename are looged into a csv file with prefix as the name.
+
+    Args:
+        folder (str): The path to the folder containing the files to be renamed.
+        FileNamePrefix (str, optional): The prefix to be added to the new file names.
+            Folder name itself is used as prefix if this is not provided.
+        start_index (int, optional): The starting index for numbering the files.
+            Starts at 1 if this is not provided.
+            Starts from the next number, if files with same prefix are already there in the folder.
+        noof_digits (int, optional): The number of digits (leading zeros) to use for the numbering.
+            Guessed from the number of files if this is not provided.
     """
     rename_list = []
     try:
@@ -34,8 +47,6 @@ def RenameFilesInFolder(
         for root, dirs, files in folder.walk(top_down=True):
             dirs[:] = []  # don't recurse into sub-folders
             csv_fileName = root / (prefix + ".csv")
-            # if Path(csv_fileName).is_file():
-            #     raise Exception("Files in this folder are already renamed")
 
             file_count = len(files)
             required_digits = math.ceil(math.log(file_count, 10)) + 1

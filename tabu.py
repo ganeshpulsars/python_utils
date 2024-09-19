@@ -1,16 +1,22 @@
 import shutil
+import os
 
 from datetime import datetime
 from pathlib import Path
 
 
-def tabu(fullFilename, archive_folder=None):
+def tabu(fullFilename: str | os.PathLike, archive_folder: str = None) -> bool:
     """
     Timestamp And Back Up of file or folder
-    Adds Byymmdd_hhmmp string between the filename and extension(s) and
+    Copies the file, adds Byymmdd_hhmmp string between the filename and extension(s) and
       saves it
-    If archive_folder is given, backup is stored in that folder
-    fullFilename could either be a Path object or a string
+
+    fullFilename : str or Path object
+        The path to the file or folder that needs to be backed-up.
+    archive_folder : str, optional
+        The path to the folder where the newly created file should be archived.
+        If not provided, file is archived in the current folder
+        If folder does not already exist, a sub-folder in the current folder will be created.
     """
     try:
         if isinstance(fullFilename, str):
@@ -28,7 +34,6 @@ def tabu(fullFilename, archive_folder=None):
             arch_folder_path = filePath / archive_folder
             if not arch_folder_path.is_dir():
                 Path(arch_folder_path).mkdir(exist_ok=True)
-                # raise Exception(f"{arch_folder_path.absolute()} does not exist")
             ffn = filePath / archive_folder / new_fn
         shutil.copy2(fullFilename, ffn)
         return ffn
