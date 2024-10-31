@@ -28,3 +28,14 @@ inputDefaultInt = inputDefaultWrapper(pyip.inputInt)
 inputDefaultDate = inputDefaultWrapper(pyip.inputDate)
 inputDefaultYesNo = inputDefaultWrapper(pyip.inputYesNo)
 inputDefaultBool = inputDefaultWrapper(pyip.inputBool)
+
+
+def inputDefaultMenu(choices, prompt="Please select :", **kwargs):
+    try:
+        default = kwargs.get("default", None)
+        default = "1" if default is None else default
+        newPrompt = prompt.replace(":", f" <{default}> :\n")
+        choice = pyip.inputMenu(choices, prompt=newPrompt, numbered=True, blank=True)
+        return choice
+    except Exception as e:
+        raise e

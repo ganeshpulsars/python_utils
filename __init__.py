@@ -12,6 +12,8 @@ from .inputPlus import inputDefaultInt  # noqa: F401
 from .inputPlus import inputDefaultDate  # noqa: F401
 from .inputPlus import inputDefaultYesNo  # noqa: F401
 from .inputPlus import inputDefaultBool  # noqa: F401
+from .inputPlus import inputDefaultMenu  # noqa: F401
+
 
 from .tabu import tabu  # noqa: F401
 
