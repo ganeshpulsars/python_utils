@@ -20,3 +20,5 @@ from .tabu import tabu  # noqa: F401
 from .cprintUtils import dprint  # noqa: F401
 from .cprintUtils import eprint  # noqa: F401
 from .cprintUtils import iprint  # noqa: F401
+
+from .generalUtils import render_exception  # noqa: F401
