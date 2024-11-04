@@ -39,15 +39,29 @@ def add_extension(fileName, extension):
     return Path(full_fileName.parent / new_fileName)
 
 
+def append_fileName(fileName, appended_str):
+    """
+    input fileName: lib/readme.txt, appended_str: highlighted
+    output: lib/readme_highlighted.txt
+    """
+    full_fileName = Path(fileName)
+    full_fileName_with_app = f"{Path(full_fileName).stem}_{appended_str}"
+    new_fileName = f"{full_fileName_with_app}{Path(full_fileName).suffix}"
+    return Path(full_fileName.parent / new_fileName)
+
+
 def backup_fileName(fileName):
     """
     input fileName: lib/readme.txt
     output: lib/readme_B240825_1512p.txt
     """
-    full_fileName = Path(fileName)
-    full_fileName_with_ts = f"{Path(full_fileName).stem}_B{timestamp()}p"
-    new_fileName = f"{full_fileName_with_ts}{Path(full_fileName).suffix}"
-    return Path(full_fileName.parent / new_fileName)
+    # full_fileName = Path(fileName)
+    # full_fileName_with_ts = f"{Path(full_fileName).stem}_B{timestamp()}p"
+    # new_fileName = f"{full_fileName_with_ts}{Path(full_fileName).suffix}"
+    # return Path(full_fileName.parent / new_fileName)
+
+    appended_str = f"B{timestamp()}p"
+    return append_fileName(fileName, appended_str)
 
 
 if __name__ == "__main__":
