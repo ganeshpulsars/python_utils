@@ -1,3 +1,5 @@
+import os
+
 from pathlib import Path
 from datetime import datetime
 from termcolor import cprint
@@ -64,6 +66,21 @@ def backup_fileName(fileName):
     return append_fileName(fileName, appended_str)
 
 
+def db_fileName(folder: str | os.PathLike) -> os.PathLike:
+    """
+    input folder name: manhole_image
+    output: manhole_image/manhole_image.db
+    """
+    try:
+        folder = Path(folder)
+        # TODO: MG: raise exception if folder is not a directory
+        parent = folder.absolute().parent
+        prefix = str(folder.absolute().relative_to(parent))
+        return folder / (prefix + ".db")
+    except Exception as e:
+        raise e
+
+
 if __name__ == "__main__":
     test_fileName = "../utils.txt"
 
@@ -78,3 +95,6 @@ if __name__ == "__main__":
 
     backupFileName = backup_fileName(test_fileName)
     cprint(f"{backupFileName=}", "green")
+
+    dbFileName = db_fileName("manhole_image")
+    cprint(f"{dbFileName=}", "green")
