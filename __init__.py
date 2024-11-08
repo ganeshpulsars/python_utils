@@ -23,4 +23,6 @@ from .cprintUtils import dprint  # noqa: F401
 from .cprintUtils import eprint  # noqa: F401
 from .cprintUtils import iprint  # noqa: F401
 
+from .generalUtils import FolderNotFoundError  # noqa: F401
 from .generalUtils import render_exception  # noqa: F401
+from .generalUtils import get_folder_name_from_argv  # noqa: F401

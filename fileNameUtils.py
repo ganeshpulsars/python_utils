@@ -47,7 +47,7 @@ def append_fileName(fileName, appended_str):
     output: lib/readme_highlighted.txt
     """
     full_fileName = Path(fileName)
-    full_fileName_with_app = f"{Path(full_fileName).stem}_{appended_str}"
+    full_fileName_with_app = f"{Path(full_fileName).stem}{appended_str}"
     new_fileName = f"{full_fileName_with_app}{Path(full_fileName).suffix}"
     return Path(full_fileName.parent / new_fileName)
 
