@@ -81,6 +81,18 @@ def db_fileName(folder: str | os.PathLike) -> os.PathLike:
         raise e
 
 
+def file_names_in_folder(folder: os.PathLike) -> [str]:
+    """
+    Returns a list of filenames in the folder
+    """
+    try:
+        for root, dirs, files in folder.walk(top_down=True):
+            dirs[:] = []  # don't recurse into sub-folders
+        return files
+    except Exception as e:
+        raise e
+
+
 if __name__ == "__main__":
     test_fileName = "../utils.txt"
 
@@ -98,3 +110,6 @@ if __name__ == "__main__":
 
     dbFileName = db_fileName("manhole_image")
     cprint(f"{dbFileName=}", "green")
+
+    for file_name in file_names_in_folder(Path("")):
+        cprint(file_name, "yellow")

@@ -6,6 +6,7 @@ from .fileNameUtils import backup_fileName  # noqa: F401
 from .fileNameUtils import timestamp  # noqa: F401
 from .fileNameUtils import append_fileName  # noqa: F401
 from .fileNameUtils import db_fileName  # noqa: F401
+from .fileNameUtils import file_names_in_folder  # noqa: F401
 
 from .inputPlus import inputDefaultWrapper  # noqa: F401
 
