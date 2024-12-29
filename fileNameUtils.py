@@ -86,6 +86,8 @@ def file_names_in_folder(folder: os.PathLike) -> [str]:
     Returns a list of filenames in the folder
     """
     try:
+        if not folder.is_dir():
+            raise FileNotFoundError(f"{folder} does not exist")
         for root, dirs, files in folder.walk(top_down=True):
             dirs[:] = []  # don't recurse into sub-folders
         return files
