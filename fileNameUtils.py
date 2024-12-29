@@ -1,3 +1,5 @@
+import os
+
 from pathlib import Path
 from datetime import datetime
 from termcolor import cprint
@@ -39,15 +41,58 @@ def add_extension(fileName, extension):
     return Path(full_fileName.parent / new_fileName)
 
 
+def append_fileName(fileName, appended_str):
+    """
+    input fileName: lib/readme.txt, appended_str: highlighted
+    output: lib/readme_highlighted.txt
+    """
+    full_fileName = Path(fileName)
+    full_fileName_with_app = f"{Path(full_fileName).stem}{appended_str}"
+    new_fileName = f"{full_fileName_with_app}{Path(full_fileName).suffix}"
+    return Path(full_fileName.parent / new_fileName)
+
+
 def backup_fileName(fileName):
     """
     input fileName: lib/readme.txt
     output: lib/readme_B240825_1512p.txt
     """
-    full_fileName = Path(fileName)
-    full_fileName_with_ts = f"{Path(full_fileName).stem}_B{timestamp()}p"
-    new_fileName = f"{full_fileName_with_ts}{Path(full_fileName).suffix}"
-    return Path(full_fileName.parent / new_fileName)
+    # full_fileName = Path(fileName)
+    # full_fileName_with_ts = f"{Path(full_fileName).stem}_B{timestamp()}p"
+    # new_fileName = f"{full_fileName_with_ts}{Path(full_fileName).suffix}"
+    # return Path(full_fileName.parent / new_fileName)
+
+    appended_str = f"B{timestamp()}p"
+    return append_fileName(fileName, appended_str)
+
+
+def db_fileName(folder: str | os.PathLike) -> os.PathLike:
+    """
+    input folder name: manhole_image
+    output: manhole_image/manhole_image.db
+    """
+    try:
+        folder = Path(folder)
+        # TODO: MG: raise exception if folder is not a directory
+        parent = folder.absolute().parent
+        prefix = str(folder.absolute().relative_to(parent))
+        return folder / (prefix + ".db")
+    except Exception as e:
+        raise e
+
+
+def file_names_in_folder(folder: os.PathLike) -> [str]:
+    """
+    Returns a list of filenames in the folder
+    """
+    try:
+        if not folder.is_dir():
+            raise FileNotFoundError(f"{folder} does not exist")
+        for root, dirs, files in folder.walk(top_down=True):
+            dirs[:] = []  # don't recurse into sub-folders
+        return files
+    except Exception as e:
+        raise e
 
 
 if __name__ == "__main__":
@@ -64,3 +109,9 @@ if __name__ == "__main__":
 
     backupFileName = backup_fileName(test_fileName)
     cprint(f"{backupFileName=}", "green")
+
+    dbFileName = db_fileName("manhole_image")
+    cprint(f"{dbFileName=}", "green")
+
+    for file_name in file_names_in_folder(Path("")):
+        cprint(file_name, "yellow")

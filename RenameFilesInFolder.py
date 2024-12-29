@@ -9,14 +9,14 @@ def RenameFilesInFolder(
     FileNamePrefix: str = None,
     start_index: int = None,
     noof_digits: int = None,
-) -> None:
+) -> int:
     """
     Function to rename files in the folder using a prefix and
     running serial number.
     Files in the first level alone are renamed. Files under sub-folders
     (if any) are not renamed.
     Old filename and new filename are looged into a csv file with prefix as the name.
-
+    Returns no of files renamed
     Args:
         folder (str): The path to the folder containing the files to be renamed.
         FileNamePrefix (str, optional): The prefix to be added to the new file names.
@@ -52,6 +52,7 @@ def RenameFilesInFolder(
             required_digits = math.ceil(math.log(file_count, 10)) + 1
 
             noof_digits = required_digits if noof_digits is None else noof_digits
+            renamed_count = 0
             i = (
                 start_index
                 if start_index is not None
@@ -70,7 +71,9 @@ def RenameFilesInFolder(
                 old_fileName.rename(new_fullFileName)
                 rename_list.append((file, new_fileName))
                 i += 1
+                renamed_count += 1
 
+            return renamed_count
     except Exception as e:
         eprint(render_exception(e))
         raise e
