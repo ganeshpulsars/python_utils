@@ -1,4 +1,5 @@
 import sys
+import os
 import traceback
 
 from pathlib import Path
@@ -29,7 +30,9 @@ def is_content_html(obj: [str, object]) -> bool:
             return "html" in obj.headers.get("content-type", "")
         except Exception:
             raise TypeError(f"Invalid type {type(obj)}")
-def get_folder_name_from_argv(index=None):
+
+
+def get_folder_name_from_argv(index: int = None) -> os.PathLike:
     """
     Helper function for receiving folder name as a command line argument.
     TODO: MG: 1. create if it does not exist using create=True arguement
@@ -49,3 +52,10 @@ def get_folder_name_from_argv(index=None):
 
     return folder
 
+
+def is_float(test_value: any) -> bool:
+    try:
+        float(test_value)
+        return True
+    except ValueError:
+        return False

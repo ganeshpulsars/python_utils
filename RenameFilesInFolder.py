@@ -1,14 +1,17 @@
 import math
+import os
 from pathlib import Path
 from .cprintUtils import dprint, eprint, iprint  # noqa: F401
 from .generalUtils import render_exception
 
 
 def RenameFilesInFolder(
-    folder: str,
+    folder: str | os.PathLike,
     FileNamePrefix: str = None,
     start_index: int = None,
     noof_digits: int = None,
+    include_extensions: list = None,
+    exclude_extensions: list = None,
 ) -> int:
     """
     Function to rename files in the folder using a prefix and
@@ -26,6 +29,10 @@ def RenameFilesInFolder(
             Starts from the next number, if files with same prefix are already there in the folder.
         noof_digits (int, optional): The number of digits (leading zeros) to use for the numbering.
             Guessed from the number of files if this is not provided.
+        include_extensions(list, optional): file names with these extensions alone will be renamed.
+            All files will be renamed if the value is None
+        exclude_extensions(list, optional): file names with these extensions will not be renamed
+            exclude_extensions takes precedence over include_extensions
     """
     rename_list = []
     try:
@@ -35,14 +42,14 @@ def RenameFilesInFolder(
         if not folder.is_dir():
             eprint(f"{folder} is not a folder")
             raise Exception(f"{folder} is not a folder")
-        else:
-            pass
 
         if FileNamePrefix is not None:
             prefix = FileNamePrefix
         else:
             parent = folder.absolute().parent
             prefix = str(folder.absolute().relative_to(parent))
+
+        exclude_extensions = [] if exclude_extensions is None else exclude_extensions
 
         for root, dirs, files in folder.walk(top_down=True):
             dirs[:] = []  # don't recurse into sub-folders
@@ -52,18 +59,31 @@ def RenameFilesInFolder(
             required_digits = math.ceil(math.log(file_count, 10)) + 1
 
             noof_digits = required_digits if noof_digits is None else noof_digits
+            dprint(f"{required_digits=}, {noof_digits=}")
             renamed_count = 0
             i = (
                 start_index
                 if start_index is not None
-                else _findLastIndex(folder, prefix) + 1
+                else _findLastIndex(
+                    folder, prefix, include_extensions, exclude_extensions
+                )
+                + 1
             )
             for file in files:
                 old_fileName = root / file
                 if old_fileName.stem.startswith(prefix + "_"):
                     continue
-                if old_fileName.stem == csv_fileName.stem:
+                elif old_fileName.stem == csv_fileName.stem:
                     continue
+                elif old_fileName.suffix in exclude_extensions:
+                    dprint(f"Excluded: {old_fileName}")
+                    continue
+                elif (
+                    include_extensions is not None
+                    and old_fileName.suffix not in include_extensions
+                ):
+                    continue
+
                 new_fileName = (
                     prefix + "_" + str(i).zfill(noof_digits) + old_fileName.suffix
                 )
@@ -83,7 +103,12 @@ def RenameFilesInFolder(
                 csv_file.write(f"{file[0]}, {file[1]}\n")
 
 
-def _findLastIndex(folder, prefix):
+def _findLastIndex(
+    folder: str | os.PathLike,
+    prefix: str,
+    include_extensions: list,
+    exclude_extensions: list,
+) -> int:
     try:
         # folder and prefix are not validated since this function will be called
         #  from the main function after all the validations
@@ -91,8 +116,16 @@ def _findLastIndex(folder, prefix):
             dirs[:] = []  # don't recurse into sub-folders
             files.sort()
             for file in reversed(files):
-                fileName = (root / file).stem
-                if fileName.startswith(prefix + "_"):
+                fullFileName = root / file
+                fileName = fullFileName.stem
+                if fullFileName.suffix in exclude_extensions:
+                    continue
+                elif (
+                    include_extensions is not None
+                    and fullFileName.suffix not in include_extensions
+                ):
+                    continue
+                elif fileName.startswith(prefix + "_"):
                     break
             else:
                 return 0  # no files starting with prefix found
