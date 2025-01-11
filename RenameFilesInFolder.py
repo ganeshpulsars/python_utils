@@ -59,7 +59,6 @@ def RenameFilesInFolder(
             required_digits = math.ceil(math.log(file_count, 10)) + 1
 
             noof_digits = required_digits if noof_digits is None else noof_digits
-            dprint(f"{required_digits=}, {noof_digits=}")
             renamed_count = 0
             i = (
                 start_index
