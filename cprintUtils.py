@@ -1,13 +1,17 @@
-from termcolor import cprint
+from termcolor import cprint as tc_cprint
 
 
-def dprint(string, *args):
-    cprint(string, "yellow")
+def dprint(string, *args, **kwargs):
+    tc_cprint(string, "yellow", *args, **kwargs)
 
 
-def eprint(string, *args):
-    cprint(string, "red")
+def eprint(string, *args, **kwargs):
+    tc_cprint(string, "red", *args, **kwargs)
 
 
-def iprint(string, *args):
-    cprint(string, "green")
+def iprint(string, *args, **kwargs):
+    tc_cprint(string, "green", *args, **kwargs)
+
+
+def cprint(string, *args, **kwargs):
+    tc_cprint(string, *args, **kwargs)
