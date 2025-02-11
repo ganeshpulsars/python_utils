@@ -10,7 +10,10 @@ def inputDefaultWrapper(inputFunc):
             else:
                 prompt = kwargs.get("prompt", "Input please :")
             default = kwargs.get("default", None)
-            newPrompt = prompt.replace(":", f" <{default}> :")
+            if ":" in prompt:
+                newPrompt = prompt.replace(":", f" <{default}> :")
+            else:
+                newPrompt = f"{prompt} <{default}> :"
             # inStr = inputFunc(*args, **kwargs, prompt=newPrompt, blank=True)
             inStr = inputFunc(newPrompt, **kwargs, blank=True)
             if inStr == "":

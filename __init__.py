@@ -30,3 +30,5 @@ from .generalUtils import render_exception  # noqa: F401
 from .generalUtils import is_content_html  # noqa: F401
 from .generalUtils import get_folder_name_from_argv  # noqa: F401
 from .generalUtils import is_float  # noqa: F401
+
+from .commands import Commands  # noqa: F401
