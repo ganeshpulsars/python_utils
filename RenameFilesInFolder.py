@@ -46,8 +46,9 @@ def RenameFilesInFolder(
         if FileNamePrefix is not None:
             prefix = FileNamePrefix
         else:
-            parent = folder.absolute().parent
-            prefix = str(folder.absolute().relative_to(parent))
+            # parent = folder.absolute().parent
+            # prefix = str(folder.absolute().relative_to(parent))
+            prefix = folder.stem
 
         exclude_extensions = [] if exclude_extensions is None else exclude_extensions
 
