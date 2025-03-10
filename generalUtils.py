@@ -59,3 +59,43 @@ def is_float(test_value: any) -> bool:
         return True
     except ValueError:
         return False
+
+
+class SerialNumberGenerator:
+    """
+    A class to generate sequential serial numbers starting from a specified value.
+
+    Parameters:
+    ----------
+        Start value of the sequence (first call to 'next' will return this number)
+        Defaults to 1
+
+    Attributes:
+    ----------
+    counter : int
+        A private attribute to track the current serial number.
+
+    Example:
+    -------
+    >>> generator = SerialNumberGenerator(start=10)
+    >>> generator.current
+    10
+    >>> generator.next
+    11
+    >>> generator.next
+    12
+    """
+
+    def __init__(self, start: int = 1):
+        self.counter = start - 1
+
+    @property
+    def next(self) -> int:
+        """A property method that increments the counter and returns the next serial number."""
+        self.counter += 1
+        return self.counter
+
+    @property
+    def current(self) -> int:
+        """A property method that returns the current value of the counter without incrementing it."""
+        return self.counter
