@@ -6,7 +6,7 @@ from .fileNameUtils import backup_fileName  # noqa: F401
 from .fileNameUtils import timestamp  # noqa: F401
 from .fileNameUtils import append_fileName  # noqa: F401
 from .fileNameUtils import db_fileName  # noqa: F401
-from .fileNameUtils import file_names_in_folder  # noqa: F401
+from .fileNameUtils import filenames_in_folder  # noqa: F401
 
 from .inputPlus import inputDefaultWrapper  # noqa: F401
 
@@ -35,3 +35,5 @@ from .generalUtils import SerialNumberGenerator  # noqa: F401
 from .datetimeUtils import is_in_date_time_format  # noqa: F401
 
 from .commands import Commands  # noqa: F401
+
+from .dbUtils import TableNotFoundError  # noqa: F401

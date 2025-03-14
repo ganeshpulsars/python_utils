@@ -81,7 +81,7 @@ def db_fileName(folder: str | os.PathLike) -> os.PathLike:
         raise e
 
 
-def file_names_in_folder(folder: os.PathLike) -> [str]:
+def filenames_in_folder(folder: os.PathLike) -> [str]:
     """
     Returns a list of filenames in the folder
     """
