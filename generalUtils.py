@@ -67,8 +67,8 @@ class SerialNumberGenerator:
 
     Parameters:
     ----------
-        Start value of the sequence (first call to 'next' will return this number)
-        Defaults to 1
+        Start value of the sequence (first call to 'current' will return this number)
+        Defaults to 0
 
     Attributes:
     ----------
@@ -86,8 +86,9 @@ class SerialNumberGenerator:
     12
     """
 
-    def __init__(self, start: int = 1):
-        self.counter = start - 1
+    def __init__(self, start: int = 0):
+        self.start = start
+        self.counter = self.start
 
     @property
     def next(self) -> int:
@@ -99,3 +100,9 @@ class SerialNumberGenerator:
     def current(self) -> int:
         """A property method that returns the current value of the counter without incrementing it."""
         return self.counter
+
+    def reset(self, value: int | None = None):
+        if value is not None:
+            self.counter = value
+        else:
+            self.counter = self.start
