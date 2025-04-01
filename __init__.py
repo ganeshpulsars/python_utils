@@ -31,6 +31,7 @@ from .generalUtils import is_content_html  # noqa: F401
 from .generalUtils import get_folder_name_from_argv  # noqa: F401
 from .generalUtils import is_float  # noqa: F401
 from .generalUtils import SerialNumberGenerator  # noqa: F401
+from .generalUtils import get_file_hash  # noqa: F401
 
 from .datetimeUtils import is_in_date_time_format  # noqa: F401
 

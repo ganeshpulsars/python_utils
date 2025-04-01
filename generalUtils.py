@@ -1,6 +1,7 @@
 import sys
 import os
 import traceback
+import hashlib
 
 from pathlib import Path
 
@@ -59,6 +60,18 @@ def is_float(test_value: any) -> bool:
         return True
     except ValueError:
         return False
+
+
+def get_file_hash(filename: str | os.PathLike) -> str:
+    try:
+        filename = Path(filename)
+        sha256 = hashlib.sha256()
+        with open(filename, "rb") as file:
+            while chunk := file.read(8192):
+                sha256.update(chunk)
+        return sha256.hexdigest()
+    except Exception as e:
+        raise e
 
 
 class SerialNumberGenerator:
