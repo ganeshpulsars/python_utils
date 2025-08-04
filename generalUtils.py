@@ -10,6 +10,14 @@ class FolderNotFoundError(FileNotFoundError):
     pass
 
 
+class FeatureNotCodedYet(Exception):
+    """Exception for using as stub to indicate a feature to be added in future"""
+
+    def __init__(self, message):
+        super().__init__(message)
+        self.message = message
+
+
 def render_exception(e, html=False):
     strOut = "Error : \n"
     for arg in e.args:
