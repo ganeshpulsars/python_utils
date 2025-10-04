@@ -7,7 +7,7 @@ from pathlib import Path
 from .generalUtils import get_file_hash
 
 
-def tabu(fullFilename: str | os.PathLike, archive_folder: str = None, skip_if_already_backedup: bool = True) -> bool:
+def tabu(fullFilename: str | os.PathLike, archive_folder: str = None, skip_if_already_backedup: bool = True) -> os.PathLike:
     """
     Timestamp And Back Up of file or folder
     Copies the file, adds Byymmdd_hhmmp string between the filename and extension(s) and
@@ -26,8 +26,13 @@ def tabu(fullFilename: str | os.PathLike, archive_folder: str = None, skip_if_al
         filePath = fullFilename.parent.absolute()
         suffixes = fullFilename.suffixes
 
-        if skip_if_already_backedup and is_valid_backup_available(fullFilename, archive_folder):
-            return True
+        if skip_if_already_backedup:
+            b_list = backups_list(fullFilename, archive_folder)
+            if len(b_list) != 0:
+                source_hash = get_file_hash(fullFilename)
+                last_backup_hash = get_file_hash(b_list[0])
+                if source_hash == last_backup_hash:
+                    return b_list[0]
 
         fn = fullFilename.stem
         now = datetime.now()
@@ -89,11 +94,11 @@ def is_valid_backup_available(fullFilename: str | os.PathLike, archive_folder: s
     Checks if a valid backup is already available by comparing the file hashes of the original file
     and the last backup file
     """
-    b_lists = backups_list(fullFilename, archive_folder)
-    if len(b_lists) == 0:
+    b_list = backups_list(fullFilename, archive_folder)
+    if len(b_list) == 0:
         return False
     if isinstance(fullFilename, str):
         fullFilename = Path(fullFilename)
     source_hash = get_file_hash(fullFilename)
-    last_backup_hash = get_file_hash(b_lists[0])
+    last_backup_hash = get_file_hash(b_list[0])
     return source_hash == last_backup_hash
