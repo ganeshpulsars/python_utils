@@ -19,6 +19,8 @@ from .inputPlus import inputDefaultMenu  # noqa: F401
 
 
 from .tabu import tabu  # noqa: F401
+from .tabu import backups_list  # noqa: F401
+from .tabu import is_valid_backup_available  # noqa: F401
 
 from .cprintUtils import dprint  # noqa: F401
 from .cprintUtils import eprint  # noqa: F401

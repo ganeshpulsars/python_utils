@@ -4,8 +4,10 @@ import os
 from datetime import datetime
 from pathlib import Path
 
+from .generalUtils import get_file_hash
 
-def tabu(fullFilename: str | os.PathLike, archive_folder: str = None) -> bool:
+
+def tabu(fullFilename: str | os.PathLike, archive_folder: str = None, skip_if_already_backedup: bool = True) -> bool:
     """
     Timestamp And Back Up of file or folder
     Copies the file, adds Byymmdd_hhmmp string between the filename and extension(s) and
@@ -24,6 +26,9 @@ def tabu(fullFilename: str | os.PathLike, archive_folder: str = None) -> bool:
         filePath = fullFilename.parent.absolute()
         suffixes = fullFilename.suffixes
 
+        if skip_if_already_backedup and is_valid_backup_available(fullFilename, archive_folder):
+            return True
+
         fn = fullFilename.stem
         now = datetime.now()
         timeStamp = now.strftime("%y%m%d_%H%M")
@@ -39,3 +44,56 @@ def tabu(fullFilename: str | os.PathLike, archive_folder: str = None) -> bool:
         return ffn
     except Exception as e:
         raise e
+
+
+def backups_list(fullFilename: str | os.PathLike, archive_folder: str = None) -> list:
+    """
+    Returns a list of backup files available in the location for the given file
+    """
+    try:
+        if isinstance(fullFilename, str):
+            fullFilename = Path(fullFilename)
+        filePath = fullFilename.parent.absolute()
+        fileName_wo_ext = fullFilename.stem
+
+        if archive_folder is None:
+            arch_folder_path = filePath
+        else:
+            arch_folder_path = filePath / archive_folder
+
+        if not arch_folder_path.is_dir():
+            return []
+
+        # files = [f for f in arch_folder_path.iterdir() if f.is_file()]
+        # return files
+
+        files = []
+        for file in arch_folder_path.iterdir():
+            if not file.is_file():
+                continue
+            if file.stem == fileName_wo_ext:
+                continue
+            if not file.stem.startswith(fileName_wo_ext):  # TODO: MG: Change this to re match
+                continue
+            files.append(file)
+
+        files.sort(key=lambda f: f.stem, reverse=True)
+        return files
+
+    except Exception as e:
+        raise e
+
+
+def is_valid_backup_available(fullFilename: str | os.PathLike, archive_folder: str = None) -> bool:
+    """
+    Checks if a valid backup is already available by comparing the file hashes of the original file
+    and the last backup file
+    """
+    b_lists = backups_list(fullFilename, archive_folder)
+    if len(b_lists) == 0:
+        return False
+    if isinstance(fullFilename, str):
+        fullFilename = Path(fullFilename)
+    source_hash = get_file_hash(fullFilename)
+    last_backup_hash = get_file_hash(b_lists[0])
+    return source_hash == last_backup_hash

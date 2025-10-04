@@ -1,0 +1,11 @@
+[project]
+name = "utils"
+version = "0.1.0"
+description = "python utilities"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+]
+
+[tool.black]
+line-length = 200  # Change 88 to your desired line length
