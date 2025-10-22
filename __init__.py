@@ -43,3 +43,6 @@ from .commands import Commands  # noqa: F401
 from .dbUtils import TableNotFoundError  # noqa: F401
 
 from .strUtils import normalise_keyword  # noqa: F401
+
+from .period import month_list  # noqa: F401
+from .period import Period  # noqa: F401
