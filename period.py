@@ -107,3 +107,52 @@ class Period:
         to_datetime = self._tz.localize(datetime.datetime.combine(LastDay, datetime.time.max))
 
         return from_datetime, to_datetime
+
+    def get_filename_suffix(self, period: str) -> str:
+        try:
+            from_date, to_date = self.get_daterange(period)
+            interval = to_date - from_date
+            suffix = ""
+            suffix += from_date.strftime("%y%m%d")
+            if interval != datetime.timedelta(0, 86399, 999999):  # > 1 day
+                suffix += to_date.strftime("_%y%m%d")
+            return suffix
+        except Exception as e:
+            raise e
+
+    def get_report_title(self, period, reportType="Report") -> str:
+        try:
+            start, end = self.get_daterange(period)
+            interval = end - start
+            if interval == datetime.timedelta(0, 86399, 999999):
+                title = "Daily " + reportType + " - " + end.strftime("%d-%b-%y")
+            elif interval == datetime.timedelta(6, 86399, 999999):
+                title = "Weekly " + reportType + " - " + end.strftime("%d-%b-%y")
+            elif (start.day == 1) and (end.day == calendar.monthrange(end.year, end.month)[1]) and (start.month == end.month):
+                title = "Monthly " + reportType + " - " + end.strftime("%B %y")
+            elif (start.day == 1) and (end.day == 15) and (start.month == end.month):
+                title = "Fortnightly " + reportType + " - " + end.strftime("%B %y/1")
+            elif (start.day == 16) and (end.day == calendar.monthrange(end.year, end.month)[1]) and (start.month == end.month):
+                title = "Fortnightly " + reportType + " - " + end.strftime("%B %y/2")
+            elif (start.strftime("%d%m") == "0101") and (end.strftime("%d%m") == "3112") and (start.strftime("%y") == end.strftime("%y")):
+                title = "Yearly " + reportType + " - " + end.strftime("%Y")
+            else:
+                title = reportType + " - " + end.strftime("%d-%b-%y")
+            return title
+        except Exception:
+            raise
+
+    def get_truncated_daterange(self, period, includeToday=False) -> str:
+        try:
+            from_date, to_date = self.get_daterange(period)
+            if from_date.date() == to_date.date():
+                pass
+            elif to_date > self._tz.localize(datetime.datetime.now()):
+                if includeToday:
+                    to_date, to_date = self.get_daterange("today")
+                else:
+                    to_date, to_date = self.get_daterange("yesterday")
+            revised_period = from_date.strftime("%y%m%d-") + to_date.strftime("%y%m%d")
+            return revised_period
+        except Exception as e:
+            raise e
