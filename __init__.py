@@ -37,6 +37,7 @@ from .generalUtils import SerialNumberGenerator  # noqa: F401
 from .generalUtils import get_file_hash  # noqa: F401
 
 from .datetimeUtils import is_in_date_time_format  # noqa: F401
+from .datetimeUtils import parse_datetime  # noqa: F401
 
 from .commands import Commands  # noqa: F401
 

@@ -156,3 +156,11 @@ class Period:
             return revised_period
         except Exception as e:
             raise e
+
+    def get_dates_in_period(self, period: str):
+        try:
+            start_date, end_date = self.get_daterange(period)
+            for n in range(int((end_date - start_date).days) + 1):
+                yield start_date + datetime.timedelta(n)
+        except Exception as e:
+            raise e
