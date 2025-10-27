@@ -10,7 +10,7 @@ def is_in_date_time_format(string: str, format: str) -> bool:
         return False
 
 
-def parse_datetime(date_str: str, time_str: str) -> datetime:
+def parse_datetime(date_str: str, time_str: str = "") -> datetime:
     """
     Function for parsing of date and time given in arbitrary format
     """
